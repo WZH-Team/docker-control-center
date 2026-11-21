@@ -11,8 +11,6 @@
 ![Platform](https://img.shields.io/badge/platform-Linux-lightgrey?logo=debian&logoColor=white)
 ![License](https://img.shields.io/badge/license-LGPL--3.0-blue)
 
-**简体中文**
-
 </div>
 
 ---
