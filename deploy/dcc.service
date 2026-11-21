@@ -1,0 +1,29 @@
+[Unit]
+Description=Docker Control Center (DCC) - Docker Web Management Panel
+Documentation=file:///opt/dcc/README.md
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+# DCC 需要访问 docker.sock，请以 root 或 docker 组用户运行
+User=root
+Group=root
+WorkingDirectory=/opt/dcc
+ExecStart=/opt/dcc/dcc -config /opt/dcc/config.yaml
+Restart=on-failure
+RestartSec=3
+
+# 基础加固（不影响 docker.sock 访问）
+NoNewPrivileges=true
+ProtectHome=true
+ProtectSystem=full
+PrivateTmp=true
+
+# 日志
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=dcc
+
+[Install]
+WantedBy=multi-user.target

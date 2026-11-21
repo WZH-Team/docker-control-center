@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <title>Docker Control Center</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/css/app.css" />
+  </head>
+  <body>
+    <div id="app" class="min-h-screen">
+      <!-- 应用加载占位 -->
+      <div class="flex min-h-screen items-center justify-center bg-slate-100">
+        <div class="flex items-center gap-3 text-slate-500">
+          <svg class="h-5 w-5 animate-spin text-brand-600" viewBox="0 0 24 24" fill="none">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+          </svg>
+          <span>Loading...</span>
+        </div>
+      </div>
+    </div>
+    <div id="modal-root"></div>
+    <div id="toast-root" class="pointer-events-none fixed right-4 top-4 z-[60] flex w-80 flex-col gap-2"></div>
+    <script type="module" src="/js/main.js"></script>
+  </body>
+</html>

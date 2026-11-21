@@ -1,0 +1,13 @@
+{
+  "name": "dcc-web",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Docker Control Center 前端资源（TailwindCSS 构建）",
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./static/css/app.css --minify",
+    "watch": "tailwindcss -i ./src/input.css -o ./static/css/app.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17"
+  }
+}
