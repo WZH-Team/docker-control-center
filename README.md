@@ -4,7 +4,7 @@
 
 <h2>Docker Control Center</h2>
 
-<p>单文件 Docker Web 管理面板 —— 容器、镜像、存储卷与 Compose 项目管理</p>
+<p>单文件轻量化 Docker Web 管理面板 —— 容器、镜像、存储卷与 Compose 项目管理</p>
 
 ![Go](https://img.shields.io/badge/Go-1.22%2B-00ADD8?logo=go&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38B2AC?logo=tailwindcss&logoColor=white)
@@ -28,6 +28,13 @@
 - 🪵 **系统日志** —— 默认开启，级别可配置（debug / info / warn / error，默认 warn；info 级别可记录操作日志），可在界面查看
 - 📥 **一键安装 Docker** —— 未安装 Docker 的机器登录后可直接执行官方安装脚本（仅 Linux）
 - 🪶 **单文件部署** —— 前端经 `go:embed` 打包进二进制，运行时第三方依赖仅 `gopkg.in/yaml.v3`
+
+## 屏幕截图
+
+|  |  |
+| :---: | :---: |
+| **登录**<br/>![登录](docs/screenshots/login.png) | **容器**<br/>![容器](docs/screenshots/containers.png) |
+| **镜像**<br/>![镜像](docs/screenshots/images.png) | **Compose 项目**<br/>![Compose 项目](docs/screenshots/compose.png) |
 
 ## 快速开始
 
@@ -140,8 +147,8 @@ openssl req -x509 -newkey rsa:2048 -nodes -days 365 \
 
 ### 环境要求
 
-- **Go** >= 1.22（建议使用最新补丁版本）
-- **Node.js** >= 18
+- **Go** >= 1.22
+- **Node.js** >= 26
 - **pnpm** >= 9
 
 ### 构建
