@@ -26,19 +26,22 @@ type Watcher struct {
 }
 
 // NewWatcher 创建配置热重载监听器。
+// 基线文件状态在构造时即记录，避免与调用方随后的写入产生竞态。
 func NewWatcher(path string, logger *slog.Logger, onReload func(*Config), onError func(error)) *Watcher {
-	return &Watcher{
+	w := &Watcher{
 		path:     path,
 		interval: 2 * time.Second,
 		onReload: onReload,
 		onError:  onError,
 		logger:   logger,
 	}
+	w.snapshot()
+	return w
 }
 
 // Run 阻塞运行监听循环，直到 ctx 取消。
+// 注意：此处不重复记录基线，否则可能把调用方的并发写入误记为基线，导致漏检。
 func (w *Watcher) Run(ctx context.Context) {
-	w.snapshot()
 	ticker := time.NewTicker(w.interval)
 	defer ticker.Stop()
 	for {

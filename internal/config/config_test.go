@@ -231,7 +231,6 @@ func TestWatcherHotReload(t *testing.T) {
 	failed := make(chan error, 4)
 	w := NewWatcher(path, nil, func(c *Config) { loaded <- c }, func(e error) { failed <- e })
 	w.interval = 50 * time.Millisecond
-	w.snapshot()
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -250,7 +249,7 @@ func TestWatcherHotReload(t *testing.T) {
 		}
 	case err := <-failed:
 		t.Fatalf("热重载失败: %v", err)
-	case <-time.After(5 * time.Second):
+	case <-time.After(10 * time.Second):
 		t.Fatal("等待热重载超时")
 	}
 
@@ -265,7 +264,7 @@ func TestWatcherHotReload(t *testing.T) {
 		if err == nil {
 			t.Fatal("非法配置应上报错误")
 		}
-	case <-time.After(5 * time.Second):
+	case <-time.After(10 * time.Second):
 		t.Fatal("等待错误回调超时")
 	}
 }

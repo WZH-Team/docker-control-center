@@ -47,10 +47,11 @@
 ### 安装与运行
 
 ```bash
-# 构建（见「开发」一节）或直接获取二进制后：
-mkdir -p /opt/dcc && cp dcc /opt/dcc/ && cd /opt/dcc
+# Releases 或构建获取二进制后：
+# mkdir -p /opt/dcc && cp dcc /opt/dcc/ && cd /opt/dcc
 chmod +x dcc
-./dcc
+./dcc &
+# 前台运行：./dcc
 ```
 
 首次启动会在程序目录生成 `config.yaml`。以前台交互方式运行时，控制台输出登录用户名与密码：
