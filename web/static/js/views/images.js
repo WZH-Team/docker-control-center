@@ -1,4 +1,4 @@
-﻿// 闀滃儚瑙嗗浘锛氬垪琛ㄣ€佸閫夊垹闄ゃ€佹媺鍙栥€佹洿鏂般€佽鎯呫€?
+// 镜像视图：列表、多选删除、拉取、更新、详情。
 import { api } from "../api.js";
 import { t, errorMessage } from "../i18n.js";
 import {
@@ -67,7 +67,7 @@ export async function renderImages(view, ctx) {
 
   function renderTable() {
     const rows = filtered();
-    // 鑷姩鍒锋柊鍚庝繚鐣欐湁鏁堥€変腑椤癸紝娓呯悊宸叉秷澶辩殑鏉＄洰銆?
+    // 自动刷新后保留有效选中项，清理已消失的条目。
     const validIds = new Set(data.map((r) => r.id));
     for (const id of [...selected]) {
       if (!validIds.has(id)) selected.delete(id);
@@ -156,7 +156,7 @@ export async function renderImages(view, ctx) {
         <td class="td whitespace-nowrap text-xs text-slate-500">${esc(fmtTime(img.created))}</td>
         <td class="td">
           ${inUse
-            ? `<span class="badge bg-rose-100 text-rose-700">${esc(t("images.inUse"))} 路 ${inUse}</span>`
+            ? `<span class="badge bg-rose-100 text-rose-700">${esc(t("images.inUse"))} · ${inUse}</span>`
             : `<span class="badge bg-slate-100 text-slate-500">${esc(t("images.unused"))}</span>`}
         </td>
         <td class="td">
@@ -197,7 +197,7 @@ export async function renderImages(view, ctx) {
         if (!ok) return;
         const res = await api.post("/api/images/update", { ref });
         toast(t("images.updateStarted"), "success");
-        openJobModal(res.jobId, { title: `${t("images.update")} 路 ${ref}`, onDone: load });
+        openJobModal(res.jobId, { title: `${t("images.update")} · ${ref}`, onDone: load });
       }
     } catch (err) {
       toast(errorMessage(err), "error");
@@ -255,7 +255,7 @@ export async function renderImages(view, ctx) {
     }
   }
 
-  // 鎷夊彇闀滃儚銆?
+  // 拉取镜像。
   document.getElementById("img-pull").addEventListener("click", async () => {
     const ref = await promptDialog({
       title: t("images.pullTitle"),
@@ -267,13 +267,13 @@ export async function renderImages(view, ctx) {
     try {
       const res = await api.post("/api/images/pull", { ref });
       toast(t("images.pullStarted"), "success");
-      openJobModal(res.jobId, { title: `${t("images.pull")} 路 ${ref}`, onDone: load });
+      openJobModal(res.jobId, { title: `${t("images.pull")} · ${ref}`, onDone: load });
     } catch (err) {
       toast(errorMessage(err), "error");
     }
   });
 
-  // 澶氶€夊垹闄ゃ€?
+  // 多选删除。
   document.getElementById("img-del-selected").addEventListener("click", async () => {
     const refs = [...selected];
     if (refs.length === 0) return;
@@ -297,7 +297,7 @@ export async function renderImages(view, ctx) {
   document.getElementById("img-refresh").addEventListener("click", load);
   document.getElementById("img-search").addEventListener("input", renderTable);
 
-  // 鑷姩鍒锋柊锛?0s锛夛紝鍒锋柊淇濈暀閫変腑椤广€?
+  // 自动刷新（10s），刷新保留选中项。
   let timer = null;
   const setAuto = (on) => {
     if (timer) clearInterval(timer);

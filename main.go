@@ -27,7 +27,7 @@ import (
 	"dcc/internal/server"
 )
 
-const appVersion = "0.3.5"
+const appVersion = "0.3.6"
 
 // app 运行期组件容器。
 type app struct {

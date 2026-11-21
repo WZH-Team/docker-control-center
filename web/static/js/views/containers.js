@@ -1,4 +1,4 @@
-﻿// 瀹瑰櫒瑙嗗浘锛氬垪琛ㄣ€佸惎鍋滈噸鍚€佸垹闄ゃ€佹洿鏂帮紙latest锛夈€佽鎯呫€?
+// 容器视图：列表、启停重启、删除、更新（latest）、详情。
 import { api } from "../api.js";
 import { t, errorMessage } from "../i18n.js";
 import {
@@ -151,7 +151,7 @@ export async function renderContainers(view, ctx) {
         if (!ok) return;
         const res = await api.post(`/api/containers/${encodeURIComponent(id)}/update`);
         toast(t("containers.updated"), "success");
-        openJobModal(res.jobId, { title: `${t("containers.update")} 路 ${name}`, onDone: load });
+        openJobModal(res.jobId, { title: `${t("containers.update")} · ${name}`, onDone: load });
         return;
       }
 
@@ -179,7 +179,7 @@ export async function renderContainers(view, ctx) {
   }
 
   function detailHTML(d) {
-    const mapRows = (obj, keyLabel, valLabel) => Object.entries(obj || {})
+    const mapRows = (obj) => Object.entries(obj || {})
       .map(([k, v]) => `<div class="flex gap-2 border-b border-slate-100 py-1 text-xs last:border-0">
           <span class="w-40 shrink-0 break-all font-mono text-slate-500">${esc(k)}</span>
           <span class="min-w-0 flex-1 break-all font-mono text-slate-700">${esc(v)}</span>
@@ -210,7 +210,7 @@ export async function renderContainers(view, ctx) {
         ${(d.ports || []).length
           ? `<div class="space-y-1">${d.ports.map((p) => `
               <div class="rounded-lg bg-slate-50 px-3 py-1.5 font-mono text-xs text-slate-600">
-                ${esc(p.ip || "0.0.0.0")}:${esc(p.publicPort || "-")} 鈫?${esc(p.privatePort)}/${esc(p.type)}
+                ${esc(p.ip || "0.0.0.0")}:${esc(p.publicPort || "-")} → ${esc(p.privatePort)}/${esc(p.type)}
               </div>`).join("")}</div>`
           : `<div class="text-xs text-slate-400">-</div>`}
       </div>
@@ -221,7 +221,7 @@ export async function renderContainers(view, ctx) {
           ? `<div class="space-y-1">${d.mounts.map((m) => `
               <div class="rounded-lg bg-slate-50 px-3 py-1.5 font-mono text-xs text-slate-600">
                 <span class="badge bg-slate-200 text-slate-600 mr-2">${esc(m.type)}</span>
-                ${esc(m.name || m.source)} 鈫?${esc(m.destination)} ${m.rw ? "" : "(ro)"}
+                ${esc(m.name || m.source)} → ${esc(m.destination)} ${m.rw ? "" : "(ro)"}
               </div>`).join("")}</div>`
           : `<div class="text-xs text-slate-400">-</div>`}
       </div>
@@ -231,7 +231,7 @@ export async function renderContainers(view, ctx) {
         ${(d.networks || []).length
           ? `<div class="space-y-1">${d.networks.map((n) => `
               <div class="rounded-lg bg-slate-50 px-3 py-1.5 font-mono text-xs text-slate-600">
-                ${esc(n.name)} 路 ${esc(n.ip || "-")} ${n.aliases && n.aliases.length ? `路 ${esc(n.aliases.join(", "))}` : ""}
+                ${esc(n.name)} · ${esc(n.ip || "-")} ${n.aliases && n.aliases.length ? `· ${esc(n.aliases.join(", "))}` : ""}
               </div>`).join("")}</div>`
           : `<div class="text-xs text-slate-400">-</div>`}
       </div>
@@ -255,7 +255,7 @@ export async function renderContainers(view, ctx) {
   document.getElementById("ctr-refresh").addEventListener("click", load);
   document.getElementById("ctr-search").addEventListener("input", renderTable);
 
-  // 鑷姩鍒锋柊锛?0s锛夛紝涓庝富娴?Docker 闈㈡澘涔犳儻涓€鑷淬€?
+  // 自动刷新（10s），与主流 Docker 面板习惯一致。
   let timer = null;
   const setAuto = (on) => {
     if (timer) clearInterval(timer);

@@ -1,4 +1,4 @@
-﻿// 瀛樺偍鍗疯鍥撅細鍒楄〃銆佸閫夊垹闄ゃ€佽鎯呫€?
+// 存储卷视图：列表、多选删除、详情。
 import { api } from "../api.js";
 import { t, errorMessage } from "../i18n.js";
 import {
@@ -56,7 +56,7 @@ export async function renderVolumes(view, ctx) {
 
   function renderTable() {
     const rows = filtered();
-    // 鑷姩鍒锋柊鍚庝繚鐣欐湁鏁堥€変腑椤癸紝娓呯悊宸叉秷澶辩殑鏉＄洰銆?
+    // 自动刷新后保留有效选中项，清理已消失的条目。
     const validNames = new Set(data.map((r) => r.name));
     for (const name of [...selected]) {
       if (!validNames.has(name)) selected.delete(name);
@@ -228,7 +228,7 @@ export async function renderVolumes(view, ctx) {
   document.getElementById("vol-refresh").addEventListener("click", load);
   document.getElementById("vol-search").addEventListener("input", renderTable);
 
-  // 鑷姩鍒锋柊锛?0s锛夛紝鍒锋柊淇濈暀閫変腑椤广€?
+  // 自动刷新（10s），刷新保留选中项。
   let timer = null;
   const setAuto = (on) => {
     if (timer) clearInterval(timer);
